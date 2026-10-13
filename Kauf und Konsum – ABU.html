@@ -1,0 +1,988 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Kauf und Konsum – ABU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: Lehrbuch-Prinzip – Randspalte mit Stichwort + Gesetzesartikel links, Text rechts; TOC-Sidebar auf Laptop, Kapitel-Chips auf Phone */
+:root{
+  --paper:#f4f6f3; --surface:#ffffff; --ink:#18221f; --muted:#5a6863; --line:#d6ddd9;
+  --accent:#0a6b5c; --accent-soft:#e0efeb; --signal:#c2382c; --signal-soft:#fbe9e6; --mark:#f6e27a;
+  --f-display:"Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body:"Literata", Georgia, "Times New Roman", serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#111816; --surface:#18211e; --ink:#e4ebe8; --muted:#97a6a0; --line:#2b3733;
+  --accent:#55c3ab; --accent-soft:#17312b; --signal:#ff806f; --signal-soft:#3a1d1a; --mark:#6b5e17; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#111816; --surface:#18211e; --ink:#e4ebe8; --muted:#97a6a0; --line:#2b3733;
+  --accent:#55c3ab; --accent-soft:#17312b; --signal:#ff806f; --signal-soft:#3a1d1a; --mark:#6b5e17; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6;padding-inline:16px;padding-block:0 64px}
+h1,h2,h3,h4{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+p{margin:0}
+a{color:var(--accent)}
+b,strong{font-weight:600}
+.mono{font-family:var(--f-mono);font-size:.78em}
+
+/* Header */
+.top{max-width:1180px;margin-inline:auto;padding-block:28px 18px;display:flex;flex-wrap:wrap;gap:16px 32px;align-items:flex-end;justify-content:space-between;border-bottom:2px solid var(--ink)}
+.top .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.top h1{font-size:clamp(34px,6vw,58px);font-weight:800;letter-spacing:-.02em;margin-top:6px}
+.top h1 span{color:var(--accent)}
+.progress{min-width:220px;flex:0 1 300px}
+.progress .lbl{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:12px;color:var(--muted);margin-bottom:6px;font-variant-numeric:tabular-nums}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+
+/* Chips nav (phone) */
+.chips{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);margin-inline:-16px;padding:10px 16px;display:flex;gap:8px;overflow-x:auto;border-bottom:1px solid var(--line);scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips a{flex:none;font-family:var(--f-display);font-weight:700;font-size:14px;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--surface);padding:6px 12px;border-radius:999px}
+.chips a:focus-visible,.toc a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Shell */
+.shell{max-width:1180px;margin-inline:auto;display:grid;grid-template-columns:1fr;gap:40px;padding-top:24px}
+.toc{display:none}
+main{min-width:0;display:flex;flex-direction:column;gap:56px}
+@media (min-width:980px){
+  .chips{display:none}
+  .shell{grid-template-columns:230px minmax(0,1fr)}
+  .toc{display:block;position:sticky;top:20px;align-self:start;max-height:calc(100vh - 40px);overflow:auto;font-family:var(--f-display);font-size:14px}
+  .toc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+  .toc ol ol{padding-left:12px;margin-block:2px 8px;border-left:1px solid var(--line)}
+  .toc a{display:block;color:var(--muted);text-decoration:none;padding:4px 8px;border-radius:6px}
+  .toc > ol > li > a{color:var(--ink);font-weight:700}
+  .toc a.active{background:var(--accent-soft);color:var(--accent)}
+}
+
+/* Chapter */
+.chapter{display:flex;flex-direction:column;gap:28px}
+.ch-head{display:flex;gap:14px;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:10px}
+.ch-head .num{font-family:var(--f-display);font-weight:800;font-size:clamp(34px,5vw,46px);color:var(--accent);font-variant-numeric:tabular-nums}
+.ch-head h2{font-size:clamp(26px,4vw,36px);font-weight:800;letter-spacing:-.01em}
+h3{font-size:22px;font-weight:700;color:var(--accent);margin-top:8px}
+.lead{color:var(--muted);font-style:italic;max-width:65ch}
+
+/* Margin-note rows like the textbook */
+.row{display:grid;grid-template-columns:1fr;gap:4px}
+.row > .m{font-family:var(--f-display);font-weight:700;font-size:15px}
+.row > .m .mono{display:inline-block;margin-left:6px;color:var(--accent);font-weight:500}
+.row > .t{min-width:0;max-width:65ch;display:flex;flex-direction:column;gap:10px}
+@media (min-width:700px){
+  .row{grid-template-columns:150px minmax(0,1fr);gap:20px}
+  .row > .m{text-align:right;font-size:14px;padding-top:3px}
+  .row > .m .mono{display:block;margin:2px 0 0}
+}
+.k{background:linear-gradient(transparent 58%,var(--mark) 58%);padding-inline:1px}
+.ex{color:var(--muted);font-size:15px}
+.ex i{font-style:italic}
+
+/* Pro/Contra cards */
+.pc{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px}
+.pc-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.pc-card h4{font-size:16px}
+.pc-card ul{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:3px;font-size:15px;line-height:1.45}
+.pc-card li{padding-left:20px;position:relative}
+.pc-card li.p::before{content:"+";position:absolute;left:2px;color:var(--accent);font-family:var(--f-mono);font-weight:500}
+.pc-card li.c::before{content:"–";position:absolute;left:2px;color:var(--signal);font-family:var(--f-mono);font-weight:500}
+
+/* Boxes */
+.box{background:var(--accent-soft);border-radius:10px;padding:14px 18px;display:flex;flex-direction:column;gap:6px;max-width:65ch}
+.box h4{font-size:15px;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+.box ol,.box ul{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:3px}
+.box.warn{background:var(--signal-soft)}
+.box.warn h4{color:var(--signal)}
+.tip{border-left:3px solid var(--accent);padding:4px 0 4px 14px;font-size:15.5px;max-width:65ch}
+.tip b{font-family:var(--f-display);color:var(--accent)}
+
+/* Tables */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.45}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px dashed var(--line)}
+tr:last-child td{border-bottom:0}
+thead th{font-family:var(--f-display);font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line)}
+tbody th{font-family:var(--f-display);font-weight:700;white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* Calc */
+.calc{font-family:var(--f-mono);font-size:14px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:auto 1fr;gap:6px 16px;max-width:520px;font-variant-numeric:tabular-nums}
+.calc .r{font-weight:500;color:var(--accent)}
+
+/* Flow diagrams */
+.flow{display:flex;flex-direction:column;gap:0;max-width:640px}
+.step{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;position:relative;padding-bottom:16px}
+.step:not(:last-child)::before{content:"";position:absolute;left:16px;top:30px;bottom:0;border-left:2px dotted var(--line)}
+.dot{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:14px;color:var(--surface);background:var(--accent)}
+.step.k-buyer .dot{background:var(--signal)}
+.step .who{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.step h4{font-size:17px}
+.step p{font-size:15px;color:var(--muted)}
+.bolt{color:var(--signal);font-family:var(--f-display);font-weight:700;font-size:13px}
+
+.branches{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:10px;margin-top:6px}
+.branch{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:10px 12px;font-size:14.5px;line-height:1.45;min-width:0}
+.branch b{display:block;font-family:var(--f-display);font-size:15px}
+
+/* Diagrams */
+.fig{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.fig svg{width:100%;height:auto;display:block}
+.fig figcaption,.fig .cap{font-size:14px;color:var(--muted)}
+.fig text{font-family:var(--f-display);fill:var(--ink)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px;align-items:start}
+
+/* Market simulator */
+.sim-btns{display:flex;flex-wrap:wrap;gap:8px}
+button{font:inherit}
+.btn{font-family:var(--f-display);font-weight:700;font-size:14px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:8px;padding:8px 12px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.btn.ghost{background:transparent}
+.sim-out{display:flex;flex-wrap:wrap;gap:8px 18px;font-family:var(--f-display);font-weight:700}
+.sim-out .up{color:var(--accent)} .sim-out .down{color:var(--signal)}
+
+/* Questions */
+.qs{border-top:3px solid var(--accent);padding-top:14px;display:flex;flex-direction:column;gap:8px}
+.qs-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.qs-head h3{margin:0;font-size:18px;background:var(--accent);color:var(--surface);padding:4px 10px;border-radius:4px}
+.qs-head .cnt{font-family:var(--f-mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+details.q{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+details.q summary{cursor:pointer;list-style:none;display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:start;padding:10px 12px;font-size:15.5px;line-height:1.45}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:8px}
+details.q .qn{font-family:var(--f-mono);font-size:13px;color:var(--accent);padding-top:2px;font-variant-numeric:tabular-nums}
+details.q .chev{font-family:var(--f-mono);color:var(--muted);transition:transform .2s}
+details.q[open] .chev{transform:rotate(90deg)}
+details.q.known{border-color:var(--accent)}
+details.q.known .qn::after{content:" ✓"}
+.ans{padding:0 12px 12px 66px;display:flex;flex-direction:column;gap:10px;font-size:15.5px}
+.ans ul,.ans ol{margin:0;padding-left:20px}
+.know{align-self:flex-start;display:flex;gap:8px;align-items:center;font-family:var(--f-display);font-size:14px;font-weight:700;color:var(--muted);cursor:pointer}
+.know input{width:18px;height:18px;accent-color:var(--accent)}
+@media (max-width:520px){.ans{padding-left:12px}}
+
+/* Trainer */
+.trainer{background:var(--surface);border:2px solid var(--ink);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.trainer .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.trainer .question{font-family:var(--f-display);font-size:clamp(20px,3vw,26px);font-weight:700;line-height:1.25}
+.trainer .answer{border-top:1px dashed var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.trainer .answer ul,.trainer .answer ol{margin:0;padding-left:20px}
+.trainer .actions{display:flex;flex-wrap:wrap;gap:8px}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.filters .btn{font-size:13px;padding:5px 10px}
+
+/* Cheat sheet */
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:10px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.fact .v{font-family:var(--f-display);font-weight:800;font-size:24px;color:var(--accent);font-variant-numeric:tabular-nums}
+.fact .d{font-size:14px;line-height:1.4}
+.fact .s{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.foot{color:var(--muted);font-size:13px;max-width:65ch}
+</style>
+
+<header class="top">
+  <div>
+    <div class="eyebrow">ABU · Kapitel 4 · Lehrbuch S. 107–129</div>
+    <h1>Kauf <span>&amp;</span> Konsum</h1>
+  </div>
+  <div class="progress" aria-live="polite">
+    <div class="lbl"><span>Fragen gewusst</span><span id="prog-txt">0 / 45</span></div>
+    <div class="bar"><i id="prog-bar"></i></div>
+  </div>
+</header>
+
+<nav class="chips" aria-label="Kapitel">
+  <a href="#zahlung">4.1 Zahlung</a>
+  <a href="#geldanlage">Geldanlage</a>
+  <a href="#preis">4.2 Preis</a>
+  <a href="#kauf">4.3 Kauf</a>
+  <a href="#finanzierung">Finanzierung</a>
+  <a href="#schulden">4.4 Schulden</a>
+  <a href="#betreibung">Betreibung</a>
+  <a href="#spick">Zahlen &amp; Fristen</a>
+  <a href="#trainer">Trainer</a>
+</nav>
+
+<div class="shell">
+<aside class="toc" aria-label="Inhalt">
+  <ol>
+    <li><a href="#zahlung">4.1 Zahlung &amp; Geldanlage</a>
+      <ol>
+        <li><a href="#zahlung">Bargeldloser Zahlungsverkehr</a></li>
+        <li><a href="#karten">Karten</a></li>
+        <li><a href="#digital">Digitale Zahlungsmittel</a></li>
+        <li><a href="#geldanlage">Geldanlage</a></li>
+        <li><a href="#wertschriften">Aktie vs. Obligation</a></li>
+      </ol></li>
+    <li><a href="#preis">4.2 Preisbildung</a>
+      <ol>
+        <li><a href="#preis">Markt &amp; Gleichgewicht</a></li>
+        <li><a href="#sim">Kurven verschieben</a></li>
+      </ol></li>
+    <li><a href="#kauf">4.3 Kauf</a>
+      <ol>
+        <li><a href="#kauf">Ablauf Kaufvertrag</a></li>
+        <li><a href="#begriffe">Anfrage, Offerte, Bestellung</a></li>
+        <li><a href="#stoerungen">Vertragsverletzungen</a></li>
+        <li><a href="#finanzierung">Finanzierungsarten</a></li>
+        <li><a href="#internet">Internetkauf</a></li>
+        <li><a href="#leasing">Leasing</a></li>
+      </ol></li>
+    <li><a href="#schulden">4.4 Schulden</a>
+      <ol>
+        <li><a href="#schulden">Schuldenfallen &amp; Kredite</a></li>
+        <li><a href="#betreibung">Betreibungsverfahren</a></li>
+        <li><a href="#pfaendung">Pfändung, Konkurs</a></li>
+      </ol></li>
+    <li><a href="#spick">Zahlen &amp; Fristen</a></li>
+    <li><a href="#gesetze">Gesetzesartikel</a></li>
+    <li><a href="#trainer">Prüfungstrainer</a></li>
+  </ol>
+</aside>
+
+<main>
+
+<!-- ============ 4.1 ============ -->
+<section class="chapter" id="zahlung">
+  <div class="ch-head"><span class="num">4.1</span><h2>Zahlungs- und Geldanlagemöglichkeiten</h2></div>
+
+  <h3>Bargeldloser Zahlungsverkehr</h3>
+  <p class="lead">Wer ein Konto bei einer Bank oder der Post hat, kann bargeldlos zahlen.</p>
+
+  <div class="row"><div class="m">Banküberweisung</div><div class="t"><p>Kundin füllt einen <span class="k">Zahlungsauftrag</span> aus und gibt ihn der Bank. Die Bank führt die Zahlung aus und schickt eine detaillierte <b>Belastungsanzeige</b>.</p></div></div>
+  <div class="row"><div class="m">Dauerauftrag</div><div class="t"><p>Bank überweist einen <span class="k">festen Betrag regelmässig an den gleichen Empfänger</span> zu festgesetzten Zeitpunkten.</p><p class="ex"><i>Beispiel:</i> Miete, Handy-Abo.</p></div></div>
+  <div class="row"><div class="m">Lastschriftverfahren (LSV)</div><div class="t"><p>Schriftliche Vereinbarung mit der Bank: Rechnungen <span class="k">bestimmter Unternehmen</span> gehen direkt an die Bank und werden <b>automatisch</b> bezahlt. Betrag kann jedes Mal anders sein.</p></div></div>
+  <div class="row"><div class="m">E-Banking</div><div class="t"><p>Gesicherter Internet-Zugang zu den eigenen Konten: Überblick über Finanzen, Kontoüberträge, Zahlungen erfassen, Bankinfos abfragen.</p></div></div>
+
+  <h3 id="karten">Karten</h3>
+  <div class="row"><div class="m">Kreditkarte</div><div class="t">
+    <p>Ausweis über die Zugehörigkeit zu einer <b>Kreditkartenorganisation</b>. Man zahlt nicht bar – die Organisation gewährt <span class="k">Kredit</span> und verlangt das Geld <b>Ende Monat mit einer Rechnung</b>. Zahlt man nur einen Teil: Schuldzinsen bis <b>12 %</b>.</p>
+    <p>Meist gegen Jahresgebühr (z. B. Fr. 150.–). Bargeld am Bankomat gegen Gebühr.</p>
+    <p class="ex"><i>Beispiele:</i> Mastercard, Visa, American Express, Diners Club</p>
+  </div></div>
+  <div class="row"><div class="m">Debitkarte</div><div class="t">
+    <p>Bargeldbezug rund um die Uhr und bargeldlos zahlen an Zahlterminals im In- und Ausland. Bezüge werden <span class="k">laufend dem Konto belastet</span>.</p>
+    <p class="ex"><i>Beispiele:</i> Debit Mastercard, Postcard</p>
+  </div></div>
+  <div class="row"><div class="m">Kundenkarte</div><div class="t">
+    <p>Firmen werben mit Rabatten. Die Firma profitiert <b>dreifach</b>: 1. Kundentreue, 2. <span class="k">Kundendaten</span>, 3. spart Kommissionen der Kreditkarten.</p>
+  </div></div>
+  <div class="row"><div class="m">Travel-Prepaid-Karte</div><div class="t">
+    <p><span class="k">Aufladbare Karte</span>: weltweit Geld in der Landeswährung beziehen. Bei Verlust/Diebstahl mit Restwert ersetzt (1 % des Kartenwerts als Versicherungsprämie).</p>
+  </div></div>
+
+  <div class="pc">
+    <div class="pc-card"><h4>Kreditkarte</h4><ul>
+      <li class="p">Weniger Bargeld (kleineres Diebstahlrisiko)</li>
+      <li class="p">Kautionen (z. B. Automiete): Kartennummer reicht</li>
+      <li class="c">Schlechtere Kontrolle über eigene Ausgaben</li>
+      <li class="c">Missbrauch bei Verlust</li>
+      <li class="c">Verzugszinsen sehr hoch (bis 12 %)</li></ul></div>
+    <div class="pc-card"><h4>Debitkarte</h4><ul>
+      <li class="p">Weniger Bargeld nötig</li>
+      <li class="p">Bargeld rund um die Uhr</li>
+      <li class="c">Gefahr, mehr auszugeben, als man hat</li>
+      <li class="c">Missbrauch bei Verlust (falls Code bekannt)</li></ul></div>
+    <div class="pc-card"><h4>Kundenkarte</h4><ul>
+      <li class="p">Rabatte und Aktionen</li>
+      <li class="p">Rechnung teilweise erst Ende Monat</li>
+      <li class="c">Preisnachlässe bescheiden im Vergleich zu den Daten, die man preisgibt</li>
+      <li class="c">Verzugszinsen sehr hoch (z. B. 12 %)</li></ul></div>
+    <div class="pc-card"><h4>Travel-Prepaid</h4><ul>
+      <li class="p">Keine direkte Verbindung zum Bankkonto</li>
+      <li class="p">Bei Diebstahl/Verlust ersetzt</li>
+      <li class="c">Kommission (i. d. R. 1 %) bei Kauf und Aufladung</li></ul></div>
+  </div>
+
+  <div class="tip"><b>Merke Debit vs. Kredit:</b> Debit = <i>jetzt</i> vom eigenen Konto («Ich zahle mit meinem Geld»). Kredit = <i>später</i> per Rechnung («Ich leihe mir Geld bis Ende Monat»).</div>
+
+  <h3 id="digital">Digitale Zahlungsmittel</h3>
+  <div class="row"><div class="m">Twint</div><div class="t"><p>App verbindet sich mit Bankkonto oder Kreditkarte; Betrag direkt vom Konto abgebucht. Auch als Prepaid-App möglich.</p></div></div>
+  <div class="row"><div class="m">PayPal</div><div class="t"><p>Weltweit sicher kaufen/verkaufen. PayPal zahlt die Ware und bucht dann vom Bankkonto oder der Kreditkarte ab. Kontoanmeldung nötig.</p></div></div>
+  <div class="row"><div class="m">Apple Pay</div><div class="t"><p>Mit dem Mobilgerät per Berührung mit Kredit- oder Prepaid-Kreditkarte zahlen.</p></div></div>
+  <div class="row"><div class="m">Kryptowährungen</div><div class="t"><p>Digitale Zahlungsmittel auf <span class="k">Blockchain</span>-Basis (= beliebig erweiterbare, verschlüsselte Kette von Datensätzen). Dezentral, <b>ohne kontrollierende Instanz</b> wie Banken. Ob sie überhaupt «Währung» sind, ist umstritten. Bekannteste: Bitcoin.</p></div></div>
+
+  <div class="pc">
+    <div class="pc-card"><h4>Twint</h4><ul>
+      <li class="p">Einfach mit gängigen Smartphones</li>
+      <li class="p">Geld an Freunde senden</li>
+      <li class="p">Daten in der Schweiz gespeichert</li>
+      <li class="c">PIN, neueres Smartphone, Bluetooth nötig</li>
+      <li class="c">Keine Zahlungen in Fremdwährung</li></ul></div>
+    <div class="pc-card"><h4>PayPal</h4><ul>
+      <li class="p">Verkäufer sieht keine Bankdaten</li>
+      <li class="p">In CHF gebührenfrei, Anmeldung gratis</li>
+      <li class="p">Geld an Freunde senden</li>
+      <li class="c">Gebühren je nach Quelle, Land, Währung</li>
+      <li class="c">Smartphone oder Computer nötig</li></ul></div>
+    <div class="pc-card"><h4>Apple Pay</h4><ul>
+      <li class="p">Kartendetails nicht einsehbar</li>
+      <li class="p">Zahlung in Sekunden</li>
+      <li class="p">Funktioniert mit allen Kreditkarten</li>
+      <li class="c">Braucht Kreditkarte und iPhone</li>
+      <li class="c">Ohne Touch ID braucht es einen Code</li></ul></div>
+    <div class="pc-card"><h4>Krypto</h4><ul>
+      <li class="p">Elektronisch, minimale Kosten</li>
+      <li class="p">Unabhängig von Banken / Finanzinfrastruktur</li>
+      <li class="p">Relativ anonym, aber zurückverfolgbar</li>
+      <li class="p">Hohe Kursgewinne möglich</li>
+      <li class="c">Hochspekulativ, Wert schwankt stark</li>
+      <li class="c">Diebstahl durch Hacker</li>
+      <li class="c">Anonymität → Kriminalität, Geldwäsche</li>
+      <li class="c">Legalität umstritten, viel Energie</li></ul></div>
+  </div>
+
+  <div class="qs" data-q="4.1-4.5"></div>
+
+  <h3 id="geldanlage">Geldanlagemöglichkeiten</h3>
+  <div class="row"><div class="m">Zins</div><div class="t"><p>Der <span class="k">Preis</span>, den z. B. eine Bank für das Entgegennehmen von Geld bezahlt (= Gewinn für den Anleger).</p></div></div>
+  <div class="row"><div class="m">Rendite</div><div class="t"><p>Verhältnis des <b>Ertrags</b> zum eingezahlten Betrag, in Prozent. Damit vergleicht man Anlagen.</p>
+    <div class="calc">
+      <span>Betrag</span><span>Fr. 5000.–</span>
+      <span>Zinssatz</span><span>1 %</span>
+      <span>Kontogebühr</span><span>Fr. 36.– / Jahr</span>
+      <span>Zins</span><span>5000 × 1/100 = <span class="r">Fr. 50.–</span></span>
+      <span>Ertrag</span><span>50 − 36 = <span class="r">Fr. 14.–</span></span>
+      <span>Rendite</span><span>14 / 5000 × 100 = <span class="r">0.28 %</span></span>
+    </div>
+    <p class="ex">Formel: <b>Rendite = Ertrag ÷ Kapital × 100</b>. Ertrag = Zins − Gebühren.</p>
+  </div></div>
+  <div class="row"><div class="m">Verfügbarkeit</div><div class="t"><p>Je <b>länger</b> das Geld gebunden ist (z. B. 3 Monate Kündigung), desto <span class="k">höher der Zins</span>. Täglich abhebbar → tiefer Zins.</p></div></div>
+  <div class="row"><div class="m">Risiko</div><div class="t"><p>Je <b>höher die gewünschte Rendite</b>, desto <span class="k">grösser das Risiko</span>.</p></div></div>
+
+  <div class="two">
+    <figure class="fig" style="margin:0">
+      <svg viewBox="0 0 300 230" role="img" aria-label="Magisches Dreieck: Sicherheit, Rendite, Verfügbarkeit">
+        <polygon points="150,30 40,200 260,200" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+        <circle cx="150" cy="143" r="9" fill="var(--signal)"/>
+        <line x1="150" y1="143" x2="150" y2="62" stroke="var(--signal)" stroke-width="2"/>
+        <line x1="150" y1="143" x2="80" y2="185" stroke="var(--signal)" stroke-width="2"/>
+        <line x1="150" y1="143" x2="220" y2="185" stroke="var(--signal)" stroke-width="2"/>
+        <text x="150" y="20" text-anchor="middle" font-size="14" font-weight="700">Sicherheit</text>
+        <text x="40" y="222" text-anchor="middle" font-size="14" font-weight="700">Rendite</text>
+        <text x="260" y="222" text-anchor="middle" font-size="14" font-weight="700">Verfügbarkeit</text>
+      </svg>
+      <figcaption><b>«Magisches» Dreieck der Geldanlage:</b> Keine Anlage erfüllt alle drei Ziele maximal. Zieht man an einer Ecke, verliert man bei den anderen.</figcaption>
+    </figure>
+    <div class="box">
+      <h4>Konten</h4>
+      <p style="font-size:15.5px">Warum Geld auf die Bank/Post? Man erhält <b>Zinsen</b>, kann Konten befristet <b>überziehen</b> (Kredit), Geld ist <b>vor Diebstahl geschützt</b> und man nutzt Dienstleistungen (E-Banking).</p>
+      <ul style="font-size:15.5px">
+        <li><b>Lohnkonto:</b> frei verfügbar → tiefer Zins</li>
+        <li><b>Sparkonto</b> (z. B. Anlagesparkonto): eingeschränkt verfügbar → höhere Rendite</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 id="wertschriften">Wertschriften: Aktie und Obligation</h3>
+  <div class="row"><div class="m">Obligation</div><div class="t"><p>Man <span class="k">leiht</span> dem Herausgeber für eine feste Laufzeit Geld. Die Obligation ist eine Art Quittung: wer, wie viel, wie lange, welcher Zins. Am Ende gibt es das Geld zurück. Herausgeber: Banken, grosse Unternehmen, Bund.</p></div></div>
+  <div class="row"><div class="m">Aktie</div><div class="t"><p>Käuferin wird <span class="k">Miteigentümerin</span> eines Unternehmens: darf an der Generalversammlung teilnehmen und mitbestimmen, erhält allenfalls eine <b>Dividende</b> (Gewinnanteil). Kurs schwankt → Ertrag schwer vorauszusehen. Verkauf an der Börse.</p></div></div>
+
+  <div class="tw"><table>
+    <thead><tr><th></th><th>Obligation</th><th>Aktie</th></tr></thead>
+    <tbody>
+      <tr><th>Eigentümer</th><td>Gläubiger</td><td>Mitinhaber</td></tr>
+      <tr><th>Laufzeit</th><td>fest (z. B. 3, 5 oder 8 Jahre)</td><td>unbeschränkt</td></tr>
+      <tr><th>Ertrag</th><td>fester Zinssatz</td><td>allfällige Dividende (+ Kursgewinn)</td></tr>
+      <tr><th>Rechte</th><td>Jahreszins, Rückzahlung am Schluss</td><td>Teilnahme-, Stimm- und Wahlrecht an der GV; Recht auf Dividende</td></tr>
+      <tr><th>Arten</th><td>Kassaobligation (Banken), Anleihensobligation (Börse)</td><td>Namensaktie (Aktienbuch), Inhaberaktie (Inhaber = berechtigt)</td></tr>
+      <tr><th>Werte</th><td>–</td><td>Nennwert (aufgedruckt), Kurswert (Börsenwert)</td></tr>
+      <tr><th>Risiko</th><td>«Wer gut schlafen will, kauft Obligationen.» Sicher bei erstklassigen Schuldnern.</td><td>«Wer gut essen will, kauft Aktien.» Kursgewinne, aber auch Verluste.</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="row"><div class="m">Fonds</div><div class="t"><p>Man kauft einen <b>Anteil an einem Paket</b> aus Aktien und/oder Obligationen. Vorteil: <span class="k">Risikoverteilung</span> – fällt eine Aktie, dämpfen die anderen Titel den Verlust. Je mehr Aktienanteil, desto risikoreicher. Bei einem Börsencrash schützen auch Fonds nicht.</p></div></div>
+
+  <div class="qs" data-q="4.6-4.8"></div>
+</section>
+
+<!-- ============ 4.2 ============ -->
+<section class="chapter" id="preis">
+  <div class="ch-head"><span class="num">4.2</span><h2>Preisbildung</h2></div>
+  <div class="row"><div class="m">Markt</div><div class="t"><p>Ort, an dem <span class="k">Angebot und Nachfrage</span> zusammentreffen. In der freien Marktwirtschaft steuert der Markt die Produktion.</p></div></div>
+  <div class="row"><div class="m">Preisbildung</div><div class="t"><p>Je <b>knapper</b> ein Gut, desto <b>höher</b> der Preis (z. B. Diamanten).</p><p>Der Preis hat eine <span class="k">Signalfunktion</span>: höherer Preis → Nachfrage sinkt. Wollen mehr Leute ein beschränktes Produkt → Preis steigt.</p></div></div>
+  <div class="row"><div class="m">Marktgleichgewicht</div><div class="t"><p>Schnittpunkt von Angebots- und Nachfragekurve: <span class="k">angebotene Menge = nachgefragte Menge</span> → «geräumter Markt». Ergibt <b>Gleichgewichtspreis</b> (Marktpreis) und <b>Gleichgewichtsmenge</b>.</p></div></div>
+  <div class="row"><div class="m">Wettbewerb</div><div class="t"><p>Der freie Markt funktioniert nur mit vollständigem Wettbewerb: keine <b>Kartelle</b> (Absprachen), keine <b>Monopole</b>, und Konsumenten müssen die Angebote kennen.</p></div></div>
+  <div class="row"><div class="m">Verschiebung</div><div class="t"><p>Ändert sich ein anderer Faktor als der Preis (Einkommen, Rohstoffpreise, Steuern, Ernte, Trend), <b>verschiebt sich die ganze Kurve</b> → neues Gleichgewicht.</p></div></div>
+
+  <figure class="fig" id="sim" style="margin:0">
+    <div class="sim-btns" role="group" aria-label="Szenario wählen">
+      <button class="btn" data-s="0,0" aria-pressed="true">Ausgangslage</button>
+      <button class="btn" data-s="1.6,0" aria-pressed="false">Nachfrage ↑</button>
+      <button class="btn" data-s="-1.6,0" aria-pressed="false">Nachfrage ↓</button>
+      <button class="btn" data-s="0,1.6" aria-pressed="false">Angebot ↑</button>
+      <button class="btn" data-s="0,-1.6" aria-pressed="false">Angebot ↓</button>
+    </div>
+    <svg id="sim-svg" viewBox="0 0 340 250" role="img" aria-label="Angebots- und Nachfragekurve"></svg>
+    <div class="sim-out" id="sim-out"></div>
+    <p class="cap" id="sim-cap"></p>
+  </figure>
+
+  <div class="tw"><table>
+    <thead><tr><th>Ereignis</th><th>Kurve</th><th>Preis</th><th>Menge</th><th>Buchbeispiel</th></tr></thead>
+    <tbody>
+      <tr><th>Nachfrage nimmt zu</th><td>N nach rechts</td><td>steigt ↑</td><td>steigt ↑</td><td>Trendprodukt</td></tr>
+      <tr><th>Nachfrage nimmt ab</th><td>N nach links</td><td>sinkt ↓</td><td>sinkt ↓</td><td>Wirtschaftskrise, weniger Einkommen</td></tr>
+      <tr><th>Angebot nimmt zu</th><td>A nach rechts</td><td>sinkt ↓</td><td>steigt ↑</td><td>Rekord-Tomatenernte</td></tr>
+      <tr><th>Angebot nimmt ab</th><td>A nach links</td><td>steigt ↑</td><td>sinkt ↓</td><td>Erdölländer drosseln Förderung</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tip"><b>Eselsbrücke:</b> Bei Nachfrage-Änderung gehen Preis und Menge in <i>die gleiche</i> Richtung. Bei Angebots-Änderung gehen sie in <i>entgegengesetzte</i> Richtungen.</div>
+
+  <div class="qs" data-q="4.9-4.10"></div>
+</section>
+
+<!-- ============ 4.3 ============ -->
+<section class="chapter" id="kauf">
+  <div class="ch-head"><span class="num">4.3</span><h2>Kauf</h2></div>
+  <h3>Ablaufschema eines Kaufvertrags</h3>
+  <div class="flow">
+    <div class="step k-buyer"><div class="dot">1</div><div><div class="who">Käufer</div><h4>Anfrage</h4><p>Unverbindlich, mündlich oder schriftlich.</p></div></div>
+    <div class="step"><div class="dot">2</div><div><div class="who">Verkäuferin</div><h4>Angebot / Offerte</h4><p>Verbindlich oder unverbindlich (OR 7).</p></div></div>
+    <div class="step k-buyer"><div class="dot">3</div><div><div class="who">Käufer</div><h4>Bestellung</h4><p>Nimmt die Offerte an → <b>Kaufvertrag abgeschlossen</b> (OR 1).</p></div></div>
+    <div class="step"><div class="dot">4</div><div><div class="who">Verkäuferin</div><h4>Lieferung mit Rechnung</h4><p><span class="bolt">⚡ Störungen:</span> Lieferungsverzug, mangelhafte Lieferung, Annahmeverzug</p></div></div>
+    <div class="step k-buyer"><div class="dot">5</div><div><div class="who">Käufer</div><h4>Bezahlung</h4><p><span class="bolt">⚡ Störungen:</span> Zahlungsverzug → Betreibung</p></div></div>
+    <div class="step"><div class="dot">6</div><div><div class="who">Verkäuferin</div><h4>Quittung ausstellen</h4><p>Auf Wunsch, als Beweis (OR 88).</p></div></div>
+    <div class="step k-buyer"><div class="dot">7</div><div><div class="who">Käufer</div><h4>Aufbewahren</h4><p>Quittungen 5 bzw. 10 Jahre (Verjährung).</p></div></div>
+  </div>
+
+  <h3 id="begriffe">Schlüsselbegriffe</h3>
+  <div class="row"><div class="m">Anfrage</div><div class="t"><p>Informationen über Gegenstand, Preis, Liefer- und Zahlungsbedingungen. Mündlich oder schriftlich. <span class="k">Unverbindlich.</span></p></div></div>
+  <div class="row"><div class="m">Offerte <span class="mono">OR 7</span></div><div class="t">
+    <p><b>Verbindlich:</b> Schaufensterauslage mit Preis, schriftlich unterschriebene Offerte → Käufer kann zum angeschriebenen Preis kaufen.</p>
+    <p><b>Unverbindlich:</b> <span class="k">Kataloge, Inserate, Prospekte</span>.</p>
+  </div></div>
+  <div class="row"><div class="m">Wesentlicher Irrtum <span class="mono">OR 23</span></div><div class="t"><p>Schutzfunktion für die Verkäuferin: Ist ein Preis <b>eindeutig zu tief</b> angeschrieben (Armband Fr. 200.– statt Fr. 20 000.–), kann der Verkauf <span class="k">angefochten</span> werden.</p></div></div>
+  <div class="row"><div class="m">Befristet / unbefristet <span class="mono">OR 3–5</span></div><div class="t">
+    <p><b>Befristet:</b> gilt bis zum Ablauf der Frist.</p>
+    <p><b>Unbefristet mündlich/telefonisch:</b> muss <span class="k">sofort</span> angenommen werden.</p>
+    <p><b>Unbefristet schriftlich:</b> gebunden, bis eine rechtzeitige Bestellung zu erwarten wäre (ca. <b>7–10 Tage</b>).</p>
+  </div></div>
+  <div class="row"><div class="m">Unbestellte Ware <span class="mono">OR 6a</span></div><div class="t"><p>Ist <b>keine Offerte</b>. Muss weder aufbewahrt noch zurückgeschickt werden. <b>Ausnahme:</b> offensichtlich irrtümlich zugestellt → Absender benachrichtigen.</p></div></div>
+  <div class="row"><div class="m">Bestellung <span class="mono">OR 1</span></div><div class="t"><p>Käufer nimmt die Offerte an → <span class="k">Kaufvertrag</span> ist abgeschlossen (OR 9: Möglichkeit des Widerrufs).</p></div></div>
+  <div class="box">
+    <h4>Wichtig bei Kaufverträgen</h4>
+    <ul><li>Auch <b>mündliche</b> Zusagen sind bindend.</li><li>Nie zu einer Unterschrift drängen lassen.</li><li>Vor der Unterschrift das Kleingedruckte lesen.</li><li>Wichtige mündliche Abmachungen schriftlich bestätigen lassen.</li></ul>
+  </div>
+
+  <h3 id="stoerungen">Vertragsverletzungen</h3>
+  <div class="row"><div class="m">Mahnkauf <span class="mono">OR 107</span></div><div class="t">
+    <p><b>Lieferungsverzug</b> mit ungefährer Lieferfrist. Frist verstrichen → Käufer setzt Verkäuferin mit einer <span class="k">Nachfrist in Verzug</span> (am besten eingeschriebene Liefermahnung).</p>
+  </div></div>
+  <div class="box">
+    <h4>Möglichkeiten nach Ablauf der Nachfrist</h4>
+    <ol type="a"><li>Auf späterer Lieferung bestehen + evtl. Schadenersatz</li><li>Auf Lieferung verzichten und
+      <ul><li>Schadenersatz wegen Vertragsverletzung verlangen, <i>oder</i></li><li>vom Vertrag zurücktreten.</li></ul></li></ol>
+  </div>
+  <div class="row"><div class="m">Fixkauf <span class="mono">OR 108</span></div><div class="t"><p>Liefertermin ist <b>entscheidend</b> (Hochzeitskleid, Würste für den Match). Nicht pünktlich → Verkäuferin ist <span class="k">sofort in Verzug</span>, <b>keine Nachfrist</b> nötig. Gleiche Rechte wie beim Mahnkauf.</p></div></div>
+  <div class="row"><div class="m">Gewährleistung / Garantie <span class="mono">OR 197, 210</span></div><div class="t">
+    <p><b>Mangelhafte Lieferung:</b> Ware muss die zugesicherten Eigenschaften haben und tauglich sein. Verkäuferin haftet <span class="k">2 Jahre</span> – auch für versteckte Mängel und ohne eigenes Verschulden.</p>
+    <p>Gegenüber Konsumenten nicht verkürzbar (Ausnahme <b>Occasionen: 1 Jahr</b>). Aber: Garantie kann <b>ganz ausgeschlossen</b> werden, wenn klar und deutlich kommuniziert.</p>
+  </div></div>
+  <div class="two">
+    <div class="box"><h4>Pflichten des Käufers <span class="mono">OR 201, 204</span></h4>
+      <ol type="a"><li>Ware nach Erhalt <b>sofort prüfen</b></li><li>Mangel <b>unverzüglich melden</b> (eingeschriebene Mängelrüge)</li><li>Beanstandete Ware <b>aufbewahren</b>, ohne sie zu benutzen</li></ol></div>
+    <div class="box"><h4>Forderungen bei Mängelrüge <span class="mono">OR 205, 206</span></h4>
+      <ol type="a"><li><b>Ersatzlieferung</b> – einwandfreier Ersatz</li><li><b>Minderung</b> – Preisermässigung</li><li><b>Wandelung</b> – Kauf rückgängig machen</li></ol></div>
+  </div>
+  <div class="row"><div class="m">Zahlungsverzug <span class="mono">OR 102</span></div><div class="t"><p>Rechnung nicht bezahlt bis Fristende → Verkäuferin setzt den Zahler mit einer (eingeschriebenen) <span class="k">Zahlungsmahnung</span> in Verzug, meist mit Nachfrist. Bei genau vereinbartem Zahlungstermin ist man mit Ablauf dieses Datums <b>automatisch</b> in Verzug.</p></div></div>
+  <div class="row"><div class="m">Verzugszins <span class="mono">OR 104</span></div><div class="t"><p><span class="k">5 % pro Jahr</span>.</p></div></div>
+  <div class="row"><div class="m">Betreibung</div><div class="t"><p>Nach Ablauf der Nachfrist immer noch nicht bezahlt → Verkäuferin kann betreiben (siehe <a href="#betreibung">4.4</a>).</p></div></div>
+  <div class="row"><div class="m">Quittung <span class="mono">OR 88</span></div><div class="t"><p>Auf Wunsch muss die Verkäuferin eine Quittung als Beweis ausstellen.</p></div></div>
+  <div class="row"><div class="m">Aufbewahrung <span class="mono">OR 127, 128</span></div><div class="t"><p>Forderungen <b>verjähren</b> meist nach <span class="k">5 oder 10 Jahren</span> – so lange Quittungen aufbewahren. Auch für Versicherungen nützlich (Beweis bei Diebstahl).</p></div></div>
+
+  <div class="qs" data-q="4.11-4.22"></div>
+
+  <h3 id="finanzierung">Kaufvertrags- und Finanzierungsarten</h3>
+  <p class="lead">Unterschied: Wie viel eigenes Geld wird beim Vertragsabschluss eingesetzt? Wem gehört die Ware? Kann man zurücktreten?</p>
+  <div class="tw"><table>
+    <thead><tr><th>Art</th><th>So funktioniert's</th><th>Eigentum</th><th>Rücktritt</th></tr></thead>
+    <tbody>
+      <tr><th>Barkauf<br><span class="mono">OR 184 ff.</span></th><td>Ware und Geld <b>gleichzeitig</b> (Zug um Zug). Auch mit Debit-/Kreditkarte rechtlich ein Barkauf. Meist günstigste Art (Rabatt, Skonto).</td><td>sofort</td><td>keins</td></tr>
+      <tr><th>Gewöhnlicher Kreditkauf</th><td>Ware mit Rechnung, meist <b>30 Tage</b> Zahlungsfrist. Verkäuferin vertraut dem Käufer.</td><td>mit Übergabe</td><td>keins</td></tr>
+      <tr><th>Konsumkreditvertrag<br><span class="mono">KKG 7e–f</span></th><td>Anzahlung, Ware sofort, Rest in <b>Raten</b>. Fr. 500.– bis 80 000.–, Laufzeit länger als 3 Monate.</td><td>Eigentumsvorbehalt möglich → Käufer nur <b>Besitzer</b></td><td><b>14 Tage</b>, eingeschrieben (Poststempel)</td></tr>
+      <tr><th>Kleindarlehen / Konsumkredit<br><span class="mono">KKG 9</span></th><td>Kleinkreditbank leiht Geld, man kauft bar. Kaum Sicherheiten → sehr teuer (bis <b>10 %</b>).</td><td>sofort (Schulden bei Bank)</td><td><b>14 Tage</b></td></tr>
+      <tr><th>Leasing<br><span class="mono">KKG 1, 11</span></th><td>Leasinggeberin überlässt Sache zum Gebrauch gegen Leasingrate. Schriftlich.</td><td><b>nie</b> Eigentum des Leasingnehmers</td><td><b>14 Tage</b></td></tr>
+      <tr><th>Miet-Kauf</th><td>Man mietet; bei späterem Kauf werden Mietraten angerechnet. Gesetzlich nicht geregelt, «unechtes Leasing».</td><td>Mieter nicht Eigentümer</td><td>keins</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tip"><b>Besitz vs. Eigentum:</b> Besitz = die Sache tatsächlich haben und brauchen. Eigentum = rechtlich gehört sie mir. Beim Eigentumsvorbehalt und Leasing hast du Besitz, aber kein Eigentum.</div>
+
+  <div class="row"><div class="m">Vertragsbestandteile <span class="mono">KKG 9, 10</span></div><div class="t"><p>Im Konsumkreditvertrag müssen stehen: <b>Barzahlungspreis</b> und Preis mit Kredit, <b>Anzahlung</b>, Anzahl/Höhe/Termine der <b>Raten</b>, <b>Eigentumsverhältnisse</b> (z. B. Eigentumsvorbehalt).</p></div></div>
+  <div class="row"><div class="m">Eigentumsvorbehalt <span class="mono">KKG 10d / ZGB 715 f.</span></div><div class="t"><p>Ware bleibt bis zur <b>letzten Rate</b> Eigentum der Verkäuferin. Zahlt der Käufer nicht, holt sie den Gegenstand zurück und stellt <b>Miete und Abnützung</b> in Rechnung. Muss im <span class="k">Eigentumsvorbehaltsregister beim Betreibungsamt am Wohnort des Käufers</span> eingetragen werden.</p></div></div>
+  <div class="row"><div class="m">Kreditfähigkeit <span class="mono">KKG 28</span></div><div class="t"><p>Muss geprüft werden: jeder Kredit muss innerhalb von <span class="k">3 Jahren</span> zurückbezahlt werden können. Rate muss ins Budget passen.</p></div></div>
+
+  <h3 id="internet">Internetkauf</h3>
+  <div class="row"><div class="m">Mit einem Klick zum Kauf</div><div class="t">
+    <p>In Schweizer Onlineshops gilt das <b>OR</b>. Ein Klick = <span class="k">rechtsgültiger Vertrag</span>, meist kein Rücktritt.</p>
+    <p><b>UWG</b> (Gesetz gegen unlauteren Wettbewerb): Shop muss seine Identität angeben, AGB dürfen nicht missbräuchlich sein.</p>
+    <p><b>PBV</b> (Preisbekanntgabeverordnung, Art. 3–4): Preis in <b>CHF inkl. aller nicht frei wählbaren Zuschläge</b> (MWST, Versand), gut lesbar direkt neben der Ware.</p>
+  </div></div>
+  <div class="row"><div class="m">Webshops im Ausland</div><div class="t">
+    <p>Andere Regeln: <b>AGB genau lesen</b> (Rückgaberecht oft an Bedingungen geknüpft), <b>Versandkosten</b> vorher abklären, <b>Zoll und MWST</b> – sonst hohe Verzollungskosten.</p>
+    <p>Abgaben werden nicht erhoben, wenn sie höchstens <span class="k">Fr. 5.–</span> pro Sendung ausmachen. Laut Buch (7.7 % MWST) gratis bis Warenwert <b>Fr. 65.–</b> inkl. Transport.</p>
+    <p class="ex">Zusatz: Seit 2024 beträgt der MWST-Satz 8.1 %, die Grenze liegt damit bei rund Fr. 62.–. In der Prüfung gilt, was im Buch steht.</p>
+  </div></div>
+
+  <h3 id="leasing">Leasing (Autoleasing)</h3>
+  <div class="two">
+    <figure class="fig" style="margin:0">
+      <svg viewBox="0 0 320 120" role="img" aria-label="Direktes Leasing">
+        <rect x="6" y="40" width="110" height="46" rx="6" fill="var(--accent)"/>
+        <rect x="204" y="40" width="110" height="46" rx="6" fill="var(--accent)"/>
+        <text x="61" y="60" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--surface)">Herstellerin</text>
+        <text x="61" y="76" text-anchor="middle" font-size="11" style="fill:var(--surface)">Leasinggeberin</text>
+        <text x="259" y="60" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--surface)">Kunde</text>
+        <text x="259" y="76" text-anchor="middle" font-size="11" style="fill:var(--surface)">Leasingnehmer</text>
+        <path d="M120 50 H198" stroke="var(--ink)" stroke-width="1.6" marker-end="url(#ah)" fill="none"/>
+        <path d="M200 78 H122" stroke="var(--ink)" stroke-width="1.6" marker-end="url(#ah)" fill="none"/>
+        <text x="160" y="30" text-anchor="middle" font-size="11">Sache zum Gebrauch</text>
+        <text x="160" y="104" text-anchor="middle" font-size="11">Leasingraten</text>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--ink)"/></marker></defs>
+      </svg>
+      <figcaption><b>Direktes Leasing:</b> 2 Parteien. Herstellerin bleibt Eigentümerin, Kunde wird Besitzer.</figcaption>
+    </figure>
+    <figure class="fig" style="margin:0">
+      <svg viewBox="0 0 320 200" role="img" aria-label="Indirektes Leasing">
+        <rect x="105" y="8" width="110" height="40" rx="6" fill="var(--accent)"/>
+        <rect x="6" y="140" width="110" height="46" rx="6" fill="var(--accent)"/>
+        <rect x="204" y="140" width="110" height="46" rx="6" fill="var(--accent)"/>
+        <text x="160" y="25" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--surface)">Leasinggeberin</text>
+        <text x="160" y="40" text-anchor="middle" font-size="10" style="fill:var(--surface)">Bank / Leasingfirma</text>
+        <text x="61" y="160" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--surface)">Herstellerin</text>
+        <text x="61" y="176" text-anchor="middle" font-size="11" style="fill:var(--surface)">Lieferantin</text>
+        <text x="259" y="160" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--surface)">Kunde</text>
+        <text x="259" y="176" text-anchor="middle" font-size="11" style="fill:var(--surface)">Leasingnehmer</text>
+        <path d="M120 163 H198" stroke="var(--ink)" stroke-width="1.6" marker-end="url(#ah2)" fill="none"/>
+        <text x="160" y="196" text-anchor="middle" font-size="10">Lieferung (Besitz)</text>
+        <path d="M70 136 L120 54" stroke="var(--ink)" stroke-width="1.6" marker-end="url(#ah2)" fill="none"/>
+        <text x="52" y="95" text-anchor="middle" font-size="10">Eigentum</text>
+        <path d="M108 52 L58 134" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#ah2)" fill="none"/>
+        <text x="104" y="118" text-anchor="middle" font-size="10">Kaufpreis</text>
+        <path d="M252 136 L202 54" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#ah2)" fill="none"/>
+        <text x="272" y="95" text-anchor="middle" font-size="10">Leasingrate</text>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--ink)"/></marker></defs>
+      </svg>
+      <figcaption><b>Indirektes Leasing</b> (üblicher): Dreiecksverhältnis. Bank kauft das Auto (Kaufvertrag), schliesst mit dem Kunden den Leasingvertrag. Zwei verdienen mit → <b>teurer</b>.</figcaption>
+    </figure>
+  </div>
+
+  <div class="two">
+    <div class="box"><h4>Zwingender Inhalt <span class="mono">KKG 11</span></h4>
+      <ul><li>Beschreibung der Leasingsache</li><li>Barkaufpreis</li><li>Anzahl, Höhe, Fälligkeit der Raten</li><li>Höhe der Kaution</li><li>Verlangte Versicherungen</li><li>Effektiver Jahreszins</li><li>Hinweis auf Widerrufsrecht und -frist</li><li>Bedingungen bei vorzeitiger Beendigung</li></ul></div>
+    <div class="box warn"><h4>Kosten beim Autoleasing</h4>
+      <ul><li>Leasingrate</li><li>Obligatorische <b>Vollkasko</b>versicherung</li><li>Obligatorische <b>Haftpflicht</b>versicherung</li><li>Treibstoff</li><li>Obligatorischer Service bei Markengarage</li><li>Reparaturen, Abgaswartung, Garage usw.</li></ul></div>
+  </div>
+  <div class="row"><div class="m">Leasingrate</div><div class="t"><p>= <span class="k">Abschreibung</span> (Wertverminderung des Autos) + <span class="k">Zinsen</span> für das eingesetzte Kapital. Beeinflusst durch Leasingdauer und km-Leistung (Mehrkilometer am Ende verrechnet).</p></div></div>
+  <div class="row"><div class="m">Weitere Regeln <span class="mono">KKG 14, 28</span></div><div class="t"><p>Höchstzins <b>10 %</b>. Kreditfähigkeit prüfen: Kredit muss mit dem <b>pfändbaren Lohnanteil innerhalb von 36 Monaten</b> zurückbezahlt werden können.</p></div></div>
+  <div class="row"><div class="m">Vorzeitige Auflösung</div><div class="t"><p>Raten werden <b>neu berechnet</b>: Bei kürzerer Dauer fällt die Abschreibung stärker ins Gewicht → <span class="k">hohe Nachzahlungen</span>.</p></div></div>
+  <div class="row"><div class="m">Für wen?</div><div class="t"><p>Für Firmen/Selbständige wegen <b>Steuervorteilen</b> oft lohnend. Privatpersonen können die Raten nicht von den Steuern abziehen → meist <b>teure</b> Finanzierung.</p></div></div>
+
+  <div class="tw"><table>
+    <thead><tr><th>Beispiel</th><th class="num">Seat Leon Cupra</th><th class="num">BMW Z4</th></tr></thead>
+    <tbody>
+      <tr><th>Wert des Autos</th><td class="num">Fr. 38 900.–</td><td class="num">Fr. 61 800.–</td></tr>
+      <tr><th>Leasingdauer</th><td class="num">48 Monate</td><td class="num">24 Monate</td></tr>
+      <tr><th>km pro Jahr</th><td class="num">15 000</td><td class="num">25 000</td></tr>
+      <tr><th>Rate pro Monat</th><td class="num">Fr. 706.30</td><td class="num">Fr. 1 738.80</td></tr>
+      <tr><th>Gesamtkosten</th><td class="num">Fr. 33 902.40</td><td class="num">Fr. 41 731.20</td></tr>
+      <tr><th>Eff. Jahreszins</th><td class="num">7.44 %</td><td class="num">7.02 %</td></tr>
+      <tr><th>Restwert</th><td class="num">Fr. 12 448.–</td><td class="num">Fr. 25 956.–</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="qs" data-q="4.23-4.33"></div>
+</section>
+
+<!-- ============ 4.4 ============ -->
+<section class="chapter" id="schulden">
+  <div class="ch-head"><span class="num">4.4</span><h2>Schulden</h2></div>
+  <p class="lead">Konsumgesellschaft: Werbung, Gruppendruck, Frust- und Lustkäufe führen dazu, dass man mehr ausgibt, als man sich leisten kann.</p>
+  <div class="row"><div class="m">Schuldenfallen</div><div class="t">
+    <p><span class="k">Arbeitslosigkeit</span>, <span class="k">Trennung/Scheidung</span>, <span class="k">Selbständigkeit</span>, <span class="k">Konsumkredite</span>, <span class="k">Auto und Leasing</span>.</p>
+    <p>Junge unterschätzen die Autokosten: Selbst eine günstige Occasion kostet monatlich <b>Fr. 500.– und mehr</b> (Unterhalt, Versicherung, Steuern, Parkplatz, Benzin) – plus Zinsen bei Leasing/Kredit.</p>
+  </div></div>
+  <div class="row"><div class="m">Darlehen</div><div class="t">
+    <p>Borger erhält vom Darleiher <b>einmalig einen festen Betrag</b>, der später zurückbezahlt wird (Amortisation: auf einmal oder in Raten). Grundlage: Darlehensvertrag, am besten schriftlich. Kündigungsfrist ohne Abmachung: <span class="k">6 Wochen</span>. Sinnvoll für Aus- und Weiterbildung.</p>
+    <p>Von Bank/Konsumkreditinstitut = <b>Konsumkredit / Kleinkredit</b>: fehlende Sicherheiten → hohe Zinsen, gefährliche Schuldenfalle.</p>
+  </div></div>
+  <div class="row"><div class="m">Kontokorrentkredit</div><div class="t"><p>Kreditnehmer darf sich bis zu einer im Voraus festgelegten <span class="k">Kreditlimite</span> verschulden. Flexibel, vor allem für <b>Unternehmen</b> (z. B. Löhne zahlen, bevor Kunden zahlen). Funktioniert ähnlich wie eine Kreditkarte.</p></div></div>
+  <div class="tw"><table>
+    <thead><tr><th></th><th>Darlehen</th><th>Kontokorrentkredit</th></tr></thead>
+    <tbody>
+      <tr><th>Betrag</th><td>fester Betrag, einmal ausbezahlt</td><td>flexibel bis zur Limite, immer wieder</td></tr>
+      <tr><th>Rückzahlung</th><td>auf einmal oder in Raten</td><td>sobald Geld eingeht</td></tr>
+      <tr><th>Typisch für</th><td>Privatpersonen, Ausbildung</td><td>Unternehmen</td></tr>
+      <tr><th>Gemeinsam</th><td colspan="2">Beides ist geliehenes Geld (Kredit), auf das <b>Zinsen</b> bezahlt werden müssen.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Schulden vermeiden</h3>
+  <div class="row"><div class="m">Grundsatz</div><div class="t"><p><span class="k">«Ich gebe nur so viel aus, wie ich habe.»</span></p></div></div>
+  <div class="row"><div class="m">Persönliches Budget</div><div class="t"><p>Überblick: Wie viel nehme ich ein? Wofür gebe ich wie viel aus? Was ist unvermeidbar? Worauf kann ich verzichten? Vorteil: Geld <b>bewusst einteilen</b>, Einnahmen und Ausgaben <b>planen und kontrollieren</b>.</p></div></div>
+
+  <h3 id="betreibung">Betreibungsverfahren <span class="mono" style="color:var(--muted)">SchKG</span></h3>
+  <div class="row"><div class="m">Gläubiger / Schuldner</div><div class="t"><p><b>Gläubiger</b> = hat Recht auf Bezahlung (bekommt Geld). <b>Schuldner</b> = muss bezahlen. Geregelt im <span class="k">Bundesgesetz über Schuldbetreibung und Konkurs (SchKG)</span>.</p></div></div>
+
+  <div class="flow">
+    <div class="step"><div class="dot">1</div><div><div class="who">Gläubiger</div><h4>Mahnung(en)</h4><p>Erster Schritt, wenn eine Rechnung nicht bezahlt wird.</p></div></div>
+    <div class="step"><div class="dot">2</div><div><div class="who">Gläubiger → Betreibungsamt</div><h4>Betreibungsbegehren</h4><p>Formular beim Betreibungsamt am <b>Wohnort des Schuldners</b>: Angaben zu Person, Forderungshöhe und Grund.</p></div></div>
+    <div class="step"><div class="dot">3</div><div><div class="who">Betreibungsamt → Schuldner</div><h4>Zahlungsbefehl</h4><p>Aufforderung, innert <b>20 Tagen</b> zu zahlen. Eintrag im <b>Betreibungsregister</b>.</p>
+      <div class="branches">
+        <div class="branch"><b>a) Bezahlen</b>Verfahren beendet. Einfachster Weg.</div>
+        <div class="branch"><b>b) Rechtsvorschlag</b>Einsprache gegen die Forderung – oft nur, um zu verzögern.</div>
+        <div class="branch"><b>c) Nicht reagieren</b>Betreibung wird fortgesetzt.</div>
+      </div></div></div>
+    <div class="step"><div class="dot">4</div><div><div class="who">Gläubiger</div><h4>Fortsetzungsbegehren</h4><p>Dann geht es je nach Schuldner mit einer Betreibungsart weiter.</p></div></div>
+    <div class="step"><div class="dot">5</div><div><div class="who">Betreibungsamt</div><h4>Pfändung → Verwertung</h4><p>Vermögenswerte werden gepfändet, <b>versteigert oder verkauft</b>, Erlös an den Gläubiger.</p></div></div>
+    <div class="step"><div class="dot">6</div><div><div class="who">Falls zu wenig da ist</div><h4>Verlustschein</h4><p>Forderung ist <b>nicht erloschen</b>; Gläubiger kann später erneut betreiben. Verjährt nach <b>20 Jahren</b> (SchKG 149a).</p></div></div>
+  </div>
+
+  <h3>Betreibungsarten</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Art</th><th>Für wen</th><th>Beispiel</th></tr></thead>
+    <tbody>
+      <tr><th>Pfändung<br><span class="mono">SchKG 42</span></th><td><b>Privatpersonen</b></td><td>Mieter zahlt Mietzins nicht.</td></tr>
+      <tr><th>Konkurs<br><span class="mono">SchKG 39</span></th><td>Im <b>Handelsregister</b> Eingetragene (Einzelunternehmen, AG, GmbH)</td><td>Transportfirma kann neuen Lastwagen nicht bezahlen.</td></tr>
+      <tr><th>Pfandverwertung<br><span class="mono">SchKG 41</span></th><td>Alle, wenn Forderung durch <b>Pfand</b> gesichert ist (Faustpfand: Schmuck; Grundpfand: Land)</td><td>Hauseigentümer zahlt Hypothekarzinsen nicht.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="pfaendung">Folgen einer Betreibung</h3>
+  <div class="row"><div class="m">Pfändung</div><div class="t"><p>Der Betreibungsbeamte <b>beschlagnahmt</b> Vermögenswerte – aber nur so viel, wie zur Befriedigung der Forderung nötig ist (Mietzins Fr. 1200.– → Bankguthaben in dieser Höhe).</p></div></div>
+  <div class="tw"><table>
+    <thead><tr><th>Pfändbar <span class="mono">SchKG 89 ff.</span></th><th>Nicht pfändbar <span class="mono">SchKG 92</span></th><th>Beschränkt pfändbar <span class="mono">SchKG 93</span></th></tr></thead>
+    <tbody><tr>
+      <td>Geld, Bankguthaben, Wertpapiere, Wertsachen</td>
+      <td>Gegenstände ohne Wert (Tagebuch, Familienfotos); mit geringem Wert (Modeschmuck); <b>Kompetenzgüter</b>, die unentbehrlich sind (Kleider, Möbel, Werkzeuge)</td>
+      <td>Erwerbseinkommen: nur der Teil über dem <b>Existenzminimum</b></td>
+    </tr></tbody>
+  </table></div>
+  <div class="row"><div class="m">Konkurs</div><div class="t"><p>Im Gegensatz zur Pfändung werden <b>alle Gläubiger</b> und <b>alle Vermögenswerte und Schulden</b> berücksichtigt → <span class="k">Gesamtvollstreckung</span>.</p></div></div>
+  <div class="row"><div class="m">Forderungsklassen</div><div class="t">
+    <p>Das Konkursamt zahlt in dieser Reihenfolge. Klasse 2 erhält erst etwas, wenn Klasse 1 voll gedeckt ist:</p>
+    <ol style="margin:0;padding-left:22px"><li><b>Lohnforderungen</b> der Arbeitnehmer (letzte 6 Monate)</li><li><b>Sozialversicherungsbeiträge</b></li><li>alle übrigen Forderungen</li></ol>
+  </div></div>
+  <div class="row"><div class="m">Inkasso</div><div class="t"><p>Einzug von Forderungen durch ein <b>privates Inkassobüro</b>. Achtung: teils fragwürdige Methoden, unrechtmässige Gebühren, aggressiver Ton.</p></div></div>
+  <div class="row"><div class="m">Schuldenberatung</div><div class="t"><p>Grundsatz: <span class="k">Je früher man sich beraten lässt, desto rascher und besser</span> lassen sich die Probleme lösen. Anbieter mit Slogans wie «Wir übernehmen alle Ihre Schulden!» meiden – nur <b>seriöse Beratungsstellen</b>. Liste: <a href="https://hcp.plus/gcsl-schuldenberatung" target="_blank" rel="noopener">hcp.plus/gcsl-schuldenberatung</a></p></div></div>
+
+  <div class="qs" data-q="4.34-4.45"></div>
+</section>
+
+<!-- ============ Spick ============ -->
+<section class="chapter" id="spick">
+  <div class="ch-head"><span class="num">§</span><h2>Zahlen &amp; Fristen auf einen Blick</h2></div>
+  <div class="facts">
+    <div class="fact"><span class="v">2 Jahre</span><span class="d">Gewährleistung / Garantie</span><span class="s">OR 210 · Occasion: 1 Jahr</span></div>
+    <div class="fact"><span class="v">5 %</span><span class="d">Verzugszins pro Jahr</span><span class="s">OR 104</span></div>
+    <div class="fact"><span class="v">14 Tage</span><span class="d">Widerruf Konsumkredit, Kleinkredit, Leasing</span><span class="s">KKG 16 · eingeschrieben</span></div>
+    <div class="fact"><span class="v">20 Tage</span><span class="d">Frist im Zahlungsbefehl</span><span class="s">SchKG</span></div>
+    <div class="fact"><span class="v">20 Jahre</span><span class="d">Verjährung Verlustschein</span><span class="s">SchKG 149a</span></div>
+    <div class="fact"><span class="v">5 / 10 J.</span><span class="d">Verjährung der meisten Forderungen → Quittungen aufbewahren</span><span class="s">OR 127, 128</span></div>
+    <div class="fact"><span class="v">3 Jahre</span><span class="d">Kredit muss zurückzahlbar sein (Leasing: 36 Mt. mit pfändbarem Lohn)</span><span class="s">KKG 28</span></div>
+    <div class="fact"><span class="v">10 %</span><span class="d">Höchstzins Leasing / Kleinkredit</span><span class="s">KKG 14</span></div>
+    <div class="fact"><span class="v">12 %</span><span class="d">Zinsen Kredit-/Kundenkarte bei Teilzahlung</span><span class="s">S. 107/108</span></div>
+    <div class="fact"><span class="v">500–80 000</span><span class="d">Fr.-Bereich Konsumkreditvertrag, Laufzeit &gt; 3 Monate</span><span class="s">KKG</span></div>
+    <div class="fact"><span class="v">7–10 Tage</span><span class="d">Bindung an schriftliche unbefristete Offerte</span><span class="s">OR 3–5</span></div>
+    <div class="fact"><span class="v">30 Tage</span><span class="d">Übliche Zahlungsfrist beim Kreditkauf</span><span class="s">S. 120</span></div>
+    <div class="fact"><span class="v">6 Wochen</span><span class="d">Kündigungsfrist Darlehen (ohne Abmachung)</span><span class="s">S. 126</span></div>
+    <div class="fact"><span class="v">6 Monate</span><span class="d">Lohnforderungen in Konkursklasse 1</span><span class="s">Forderungsklassen</span></div>
+    <div class="fact"><span class="v">Fr. 5.–</span><span class="d">Zoll + MWST unter diesem Betrag werden nicht erhoben (≈ Fr. 65.– Warenwert)</span><span class="s">S. 122</span></div>
+    <div class="fact"><span class="v">1 %</span><span class="d">Kommission Travel-Prepaid-Karte</span><span class="s">S. 108</span></div>
+  </div>
+</section>
+
+<section class="chapter" id="gesetze">
+  <div class="ch-head"><span class="num">§</span><h2>Gesetzesartikel</h2></div>
+  <div class="tw"><table>
+    <thead><tr><th>Artikel</th><th>Thema</th></tr></thead>
+    <tbody>
+      <tr><th>OR 1</th><td>Kaufvertrag kommt durch übereinstimmende Willensäusserung zustande (Bestellung)</td></tr>
+      <tr><th>OR 3–5</th><td>Befristete und unbefristete Offerte</td></tr>
+      <tr><th>OR 6a</th><td>Unbestellte Ware</td></tr>
+      <tr><th>OR 7</th><td>Verbindliche / unverbindliche Offerte</td></tr>
+      <tr><th>OR 9</th><td>Widerruf</td></tr>
+      <tr><th>OR 23</th><td>Wesentlicher Irrtum</td></tr>
+      <tr><th>OR 88</th><td>Quittung</td></tr>
+      <tr><th>OR 102</th><td>Zahlungsverzug</td></tr>
+      <tr><th>OR 104</th><td>Verzugszins 5 %</td></tr>
+      <tr><th>OR 107</th><td>Mahnkauf (Nachfrist)</td></tr>
+      <tr><th>OR 108</th><td>Fixkauf (keine Nachfrist)</td></tr>
+      <tr><th>OR 127, 128</th><td>Verjährung 10 / 5 Jahre</td></tr>
+      <tr><th>OR 184 ff.</th><td>Barkauf / Kaufvertrag</td></tr>
+      <tr><th>OR 197, 210</th><td>Gewährleistung, 2 Jahre</td></tr>
+      <tr><th>OR 201, 204</th><td>Pflichten des Käufers bei Mängeln</td></tr>
+      <tr><th>OR 205, 206</th><td>Wandelung, Minderung, Ersatzlieferung</td></tr>
+      <tr><th>ZGB 715 f.</th><td>Eigentumsvorbehalt</td></tr>
+      <tr><th>KKG 1, 9–11, 14, 16, 17, 28</th><td>Konsumkredit, Leasing: Form, Inhalt, Höchstzins, Widerruf, vorzeitige Rückzahlung, Kreditfähigkeit</td></tr>
+      <tr><th>SchKG 39 / 41 / 42</th><td>Konkurs / Pfandverwertung / Pfändung</td></tr>
+      <tr><th>SchKG 89 ff., 92, 93</th><td>Pfändbar / nicht pfändbar / beschränkt pfändbar</td></tr>
+      <tr><th>SchKG 149a</th><td>Verlustschein verjährt nach 20 Jahren</td></tr>
+      <tr><th>UWG, PBV 3–4</th><td>Onlineshop: Identität, faire AGB, Preisangabe in CHF inkl. Zuschläge</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ Trainer ============ -->
+<section class="chapter" id="trainer">
+  <div class="ch-head"><span class="num">?</span><h2>Prüfungstrainer</h2></div>
+  <p class="lead">Alle 45 Fragen aus «Das weiss ich jetzt!». Erst selbst beantworten, dann Antwort aufdecken.</p>
+  <div class="filters" role="group" aria-label="Fragen filtern">
+    <button class="btn" data-f="open" aria-pressed="true">Nur offene</button>
+    <button class="btn" data-f="all" aria-pressed="false">Alle</button>
+    <button class="btn" data-f="4.1" aria-pressed="false">4.1</button>
+    <button class="btn" data-f="4.2" aria-pressed="false">4.2</button>
+    <button class="btn" data-f="4.3" aria-pressed="false">4.3</button>
+    <button class="btn" data-f="4.4" aria-pressed="false">4.4</button>
+  </div>
+  <div class="trainer">
+    <div class="meta"><span id="t-num">Frage</span><span id="t-left"></span></div>
+    <div class="question" id="t-q"></div>
+    <div class="answer" id="t-a" hidden></div>
+    <div class="actions" id="t-actions"></div>
+  </div>
+  <button class="btn ghost" id="reset" style="align-self:flex-start">Fortschritt zurücksetzen</button>
+  <p class="foot">Zusammenfassung von Kapitel 4 «Kauf und Konsum» (S. 107–129). Dein Fortschritt wird nur in diesem Browser gespeichert.</p>
+</section>
+
+</main>
+</div>
+
+<script>
+const Q = [
+ ["4.1","Neben Karten und Schecks gibt es noch andere Möglichkeiten, Zahlungen bargeldlos abzuwickeln. Nennen und beschreiben Sie zwei.",
+  "<ul><li><b>Banküberweisung:</b> Zahlungsauftrag an die Bank, diese zahlt und schickt eine Belastungsanzeige.</li><li><b>Dauerauftrag:</b> fester Betrag regelmässig an denselben Empfänger (z. B. Miete).</li><li><b>LSV:</b> Rechnungen bestimmter Firmen gehen direkt an die Bank und werden automatisch bezahlt.</li><li><b>E-Banking:</b> Zahlungen und Überträge selbst online erfassen.</li></ul>"],
+ ["4.2","Erklären Sie den Unterschied zwischen einer Debit- und einer Kreditkarte.",
+  "<b>Debitkarte:</b> Betrag wird <b>sofort/laufend</b> dem eigenen Konto belastet. <b>Kreditkarte:</b> Die Kreditkartenorganisation gewährt <b>Kredit</b>, man bezahlt erst <b>Ende Monat per Rechnung</b>; bei Teilzahlung bis 12 % Zins."],
+ ["4.3","Welches sind die Vor- und Nachteile von Kundenkarten?",
+  "<b>Vorteile:</b> Rabatte, spezielle Aktionen, Rechnung teilweise erst Ende Monat. <b>Nachteile:</b> Preisnachlässe bescheiden im Vergleich zu den preisgegebenen Kundendaten; sehr hohe Verzugszinsen (z. B. 12 %)."],
+ ["4.4","Erklären Sie anhand des Beispiels Kreditkarte die Hauptproblematik der bargeldlosen Zahlungsmittel.",
+  "Man hat eine <b>schlechtere Kontrolle über die eigenen Ausgaben</b>, weil man das Geld nicht sieht und erst später bezahlt. Man gibt schnell mehr aus, als man hat. Kann man die Rechnung nur teilweise zahlen, fallen bis 12 % Zins an → Gefahr der <b>Verschuldung</b>."],
+ ["4.5","Erklären Sie je zwei Vor- und Nachteile von zwei digitalen Zahlungsmitteln.",
+  "<b>Twint:</b> + einfach mit Smartphone, + Geld an Freunde senden, + Daten in der Schweiz; – PIN/neues Handy/Bluetooth nötig, – keine Fremdwährung.<br><b>PayPal:</b> + Verkäufer sieht keine Bankdaten, + CHF gebührenfrei; – Gebühren je nach Land/Währung/Quelle, – Gerät nötig.<br><i>(Alternativ Apple Pay oder Kryptowährungen.)</i>"],
+ ["4.6","Erklären Sie die Zusammenhänge zwischen Rendite – Risiko – Rückzügen.",
+  "Je <b>höher die Rendite</b>, desto <b>grösser das Risiko</b>. Je <b>eingeschränkter die Rückzugsmöglichkeit</b> (Verfügbarkeit), desto höher der Zins/die Rendite. Das «magische Dreieck» (Sicherheit, Rendite, Verfügbarkeit): Keine Anlage erfüllt alle drei Ziele gleichzeitig optimal."],
+ ["4.7","a) Was sagt die Zinshöhe über die Verfügbarkeit aus? b) Welches Konto hat den höheren Zins: Anlagesparkonto oder Lohnkonto?",
+  "a) Je <b>höher der Zins</b>, desto <b>eingeschränkter</b> ist der Zugang zum Geld (lange Bindung). b) Das <b>Anlagesparkonto</b>."],
+ ["4.8","Welches sind die wichtigsten Unterschiede zwischen einer Aktie und einer Obligation (Eigentümer, Rechte, Ertrag, Risiko)?",
+  "<b>Obligation:</b> Gläubiger (Geld geliehen), Recht auf Jahreszins und Rückzahlung, fester Zins, sicher. <b>Aktie:</b> Mitinhaber, Stimm-/Wahlrecht an der GV, allfällige Dividende + Kursgewinn, Risiko von Kursverlusten. «Wer gut schlafen will, kauft Obligationen – wer gut essen will, Aktien.»"],
+ ["4.9","Wann spricht man von einem Marktgleichgewicht?",
+  "Wenn die <b>angebotene Menge der nachgefragten Menge entspricht</b> (Schnittpunkt von Angebots- und Nachfragekurve) → «geräumter Markt», Gleichgewichtspreis."],
+ ["4.10","Wie verändern sich Preis und abgesetzte Menge, a) wenn bei gleichem Angebot die Nachfrage zunimmt/abnimmt? b) wenn bei gleichbleibender Nachfrage das Angebot zunimmt/abnimmt?",
+  "a) Nachfrage <b>zu</b>: Preis ↑, Menge ↑. Nachfrage <b>ab</b>: Preis ↓, Menge ↓.<br>b) Angebot <b>zu</b>: Preis ↓, Menge ↑. Angebot <b>ab</b>: Preis ↑, Menge ↓."],
+ ["4.11","Warum sind Preisangaben in Katalogen keine gültigen Offerten?",
+  "Kataloge, Inserate und Prospekte gelten nach <b>OR 7 als unverbindlich</b>. Der Anbieter muss sich vorbehalten können, nicht an unbeschränkt viele Leser liefern zu müssen (Vorrat begrenzt, Preise können sich ändern)."],
+ ["4.12","Nennen Sie zwei gültige Offertenarten.",
+  "<b>Warenauslage mit Preisangabe</b> (Schaufenster) und <b>schriftlich eingeholte, unterschriebene Offerte</b>. (Auch: befristete und unbefristete Offerte.)"],
+ ["4.13","Welche Bedeutung haben die Artikel zum «wesentlichen Irrtum»?",
+  "<b>Schutzfunktion</b> (OR 23): Wurde ein Preis eindeutig aus Versehen viel zu tief angeschrieben (Fr. 200.– statt Fr. 20 000.–), kann die Verkäuferin den Vertrag <b>anfechten</b>."],
+ ["4.14","Welche Regelungen gelten bei unbestellter Ware?",
+  "Unbestellte Ware ist <b>keine Offerte</b> (OR 6a). Man muss sie weder aufbewahren noch zurückschicken. Ausnahme: offensichtlich irrtümlich zugestellt → Absender benachrichtigen."],
+ ["4.15","Welche Bedeutung hat die Bestellung beim Kaufvertrag?",
+  "Mit der Bestellung <b>nimmt der Käufer die Offerte an</b> → der <b>Kaufvertrag ist abgeschlossen</b> (OR 1) und verbindlich."],
+ ["4.16","Was ist der erste korrekte Schritt bei einem Lieferungsverzug (Mahnkauf)?",
+  "Die Verkäuferin mit einer <b>Nachfrist in Verzug setzen</b>, am besten mit einer <b>eingeschriebenen Liefermahnung</b> (OR 107)."],
+ ["4.17","Welche Folgen hat der Lieferungsverzug für den Verkäufer bei einem Fixkauf?",
+  "Sie ist <b>sofort in Verzug</b>, eine Nachfrist ist nicht nötig (OR 108). Der Käufer kann: auf Lieferung bestehen + Schadenersatz, oder verzichten und Schadenersatz verlangen oder vom Vertrag zurücktreten."],
+ ["4.18","Welche gesetzliche Gewährleistungspflicht hat die Verkäuferin?",
+  "<b>2 Jahre</b> für Mängel an der Kaufsache, auch versteckte und ohne Verschulden (OR 197, 210). Gegenüber Konsumenten nicht verkürzbar (Occasion: 1 Jahr); kann aber klar kommuniziert ganz ausgeschlossen werden."],
+ ["4.19","Welche drei Pflichten hat die Käuferin, wenn sie den Verkäufer wegen mangelhafter Lieferung haftbar machen will?",
+  "<ol><li>Ware nach Erhalt <b>sofort prüfen</b></li><li>Mangel <b>unverzüglich melden</b> (eingeschriebene Mängelrüge)</li><li>Ware <b>aufbewahren</b>, ohne sie zu benutzen</li></ol>"],
+ ["4.20","Was kann der Käufer mithilfe einer Mängelrüge verlangen?",
+  "<b>Ersatzlieferung</b> (einwandfreier Ersatz), <b>Minderung</b> (Preisermässigung) oder <b>Wandelung</b> (Kauf rückgängig machen) – OR 205, 206."],
+ ["4.21","Welches ist das korrekte Vorgehen bei einem Zahlungsverzug?",
+  "Käufer mit einer (eingeschriebenen) <b>Zahlungsmahnung in Verzug setzen</b> und eine <b>Nachfrist</b> geben (OR 102). Ab Verzug <b>5 % Verzugszins</b> (OR 104). Nach Ablauf der Nachfrist → <b>Betreibung</b>."],
+ ["4.22","Wie lange sollten Sie wichtige Zahlungen mit Quittungen belegen können?",
+  "<b>5 bzw. 10 Jahre</b> – so lange, bis die Forderung verjährt ist (OR 127, 128)."],
+ ["4.23","Warum heisst es, dass der Barkauf meistens die günstigste Art ist, etwas zu erwerben?",
+  "Man erhält oft <b>Rabatt oder Skonto</b> und bezahlt <b>keine Zinsen oder Kreditkosten</b>."],
+ ["4.24","Was ist der Unterschied zwischen einem Barkauf und einem gewöhnlichen Kreditkauf?",
+  "<b>Barkauf:</b> Ware und Geld werden <b>gleichzeitig</b> getauscht (Zug um Zug). <b>Kreditkauf:</b> Ware wird mit <b>Rechnung</b> geliefert, bezahlt wird später (meist 30 Tage). In beiden Fällen wird der Käufer bei der Übergabe Eigentümer, kein Rücktrittsrecht."],
+ ["4.25","Konsumkreditvertrag: a) Warum darf die Verkäuferin einen Eigentumsvorbehalt machen? b) Folgen? c) Was geschieht, wenn der Käufer nicht mehr zahlen kann? d) Wo muss er geltend gemacht werden?",
+  "a) Zum <b>Schutz</b>: Der Käufer hat die Ware schon, aber noch nicht bezahlt.<br>b) Käufer ist nur <b>Besitzer</b>; Eigentum bleibt bis zur letzten Rate bei der Verkäuferin.<br>c) Sie kann den Gegenstand <b>zurückholen</b> und <b>Miete und Abnützung</b> verrechnen.<br>d) Eintrag im <b>Eigentumsvorbehaltsregister beim Betreibungsamt am Wohnort des Käufers</b>."],
+ ["4.26","Verkäuferinnen müssen nach KKG die Kreditfähigkeit prüfen. Welche Regelung gilt?",
+  "Jeder Kredit muss <b>innerhalb von 3 Jahren</b> zurückbezahlt werden können (KKG 28). Bei Leasing: mit dem pfändbaren Lohnanteil innert 36 Monaten."],
+ ["4.27","Warum sind Kleindarlehen so teuer?",
+  "Es müssen <b>kaum Sicherheiten</b> hinterlegt werden (meist reicht eine Arbeitsstelle). Das <b>Risiko</b> für die Bank ist gross → <b>hohe Zinsen</b> (bis 10 %)."],
+ ["4.28","Welche Regeln gelten für Internetkäufe im Inland?",
+  "Es gilt das <b>OR</b>: Ein Klick = rechtsgültiger Vertrag, meist kein Rücktritt. <b>UWG:</b> Shop muss Identität angeben, keine missbräuchlichen AGB. <b>PBV:</b> Preis in CHF inkl. aller nicht frei wählbaren Zuschläge (MWST, Versand), gut lesbar neben der Ware."],
+ ["4.29","Was müssen Sie beachten, wenn Sie bei Webshops im Ausland einkaufen?",
+  "<b>AGB</b> genau lesen (Rückgaberecht), <b>Versandkosten</b> abklären, <b>Zoll und MWST</b> (Verzollungskosten). Abgaben bis Fr. 5.– werden nicht erhoben (≈ Fr. 65.– Warenwert inkl. Transport)."],
+ ["4.30","Welche Kosten deckt eine normale Leasinggebühr ab?",
+  "Die <b>Abschreibung</b> (Wertverminderung des Autos) und die <b>Zinsen</b> für das eingesetzte Kapital."],
+ ["4.31","Mit welchen zusätzlichen Kosten muss ein Leasingnehmer beim Autoleasing rechnen?",
+  "Obligatorische <b>Vollkasko</b>- und <b>Haftpflicht</b>versicherung, <b>Treibstoff</b>, obligatorischer <b>Service</b> in der Markengarage, Reparaturen, Abgaswartung, Garage."],
+ ["4.32","Warum kann eine vorzeitige Auflösung des Leasingvertrags zu beträchtlichen Nachzahlungen führen?",
+  "Die Raten werden <b>neu berechnet</b>. Bei kürzerer Dauer fällt die <b>Abschreibung</b> (der hohe Wertverlust am Anfang) stärker ins Gewicht → die bisherigen Raten waren zu tief."],
+ ["4.33","Erklären Sie die Unterschiede zwischen direktem und indirektem Leasing.",
+  "<b>Direkt:</b> 2 Parteien – Herstellerin ist selbst Leasinggeberin. <b>Indirekt:</b> 3 Parteien – Bank/Leasinggesellschaft kauft das Objekt von der Herstellerin und schliesst den Leasingvertrag mit dem Kunden. Indirekt ist <b>teurer</b>, weil zwei verdienen."],
+ ["4.34","Nennen Sie drei wichtige Schuldenfallen.",
+  "Arbeitslosigkeit, Trennung/Scheidung, Selbständigkeit, Konsumkredite, Auto und Leasing (drei davon)."],
+ ["4.35","Erklären Sie Unterschiede und Gemeinsamkeiten von Darlehen und Kontokorrentkredit.",
+  "<b>Darlehen:</b> fester Betrag einmalig ausbezahlt, Rückzahlung auf einmal oder in Raten, Vertrag, Kündigungsfrist 6 Wochen. <b>Kontokorrent:</b> man kann sich flexibel bis zu einer Limite verschulden, v. a. Unternehmen. <b>Gemeinsam:</b> Beides ist geliehenes Geld, auf das Zinsen bezahlt werden."],
+ ["4.36","Wie lautet der Grundsatz zur Schuldenvermeidung?",
+  "<b>«Ich gebe nur so viel aus, wie ich habe.»</b> (+ ein Budget führen)"],
+ ["4.37","Was ist der Vorteil eines persönlichen Budgets?",
+  "Man verschafft sich einen <b>Überblick</b> und kann das Geld <b>bewusst einteilen</b>, Einnahmen und Ausgaben <b>planen und kontrollieren</b>."],
+ ["4.38","Was ist in der Regel der erste Schritt, wenn eine Rechnung nicht bezahlt wird?",
+  "Eine <b>Mahnung</b> an den Schuldner."],
+ ["4.39","In welchem Gesetz ist die Betreibung geregelt?",
+  "Im <b>Bundesgesetz über Schuldbetreibung und Konkurs (SchKG)</b>."],
+ ["4.40","Wie kann ein Schuldner das Betreibungsverfahren am einfachsten stoppen?",
+  "Indem er die Forderung <b>bezahlt</b>."],
+ ["4.41","Nennen Sie die drei Betreibungsarten.",
+  "Betreibung auf <b>Pfändung</b> (Privatpersonen), auf <b>Konkurs</b> (Handelsregister), auf <b>Pfandverwertung</b> (Forderung mit Pfand gesichert)."],
+ ["4.42","Bis zu welchem Betrag kann der Lohn gepfändet werden?",
+  "Nur der Teil, der das <b>Existenzminimum</b> übersteigt (SchKG 93)."],
+ ["4.43","Nennen Sie drei Gegenstände, die nicht gepfändet werden dürfen.",
+  "Tagebuch, Familienfotos, Modeschmuck, Kleider, Möbel, Werkzeuge (Kompetenzgüter) – drei davon."],
+ ["4.44","In welcher Reihenfolge werden bei einem Konkurs die Gläubiger berücksichtigt?",
+  "<ol><li>Lohnforderungen der Arbeitnehmer (letzte 6 Monate)</li><li>Sozialversicherungsbeiträge</li><li>alle übrigen Forderungen</li></ol>"],
+ ["4.45","Wie lautet der Grundsatz bei der Schuldenberatung?",
+  "<b>Je früher man sich beraten lässt, desto rascher und besser</b> können die Probleme gelöst werden. Nur seriöse Beratungsstellen wählen."]
+];
+const chapterOf = n => { const x = +n.split(".")[1]; return x<=8?"4.1":x<=10?"4.2":x<=33?"4.3":"4.4"; };
+
+let known = new Set();
+try { known = new Set(JSON.parse(localStorage.getItem("kk-known")||"[]")); } catch(e){}
+const save = () => { try { localStorage.setItem("kk-known", JSON.stringify([...known])); } catch(e){} };
+
+function updateProgress(){
+  document.getElementById("prog-txt").textContent = known.size + " / " + Q.length;
+  document.getElementById("prog-bar").style.width = (known.size/Q.length*100) + "%";
+  document.querySelectorAll("details.q").forEach(d => d.classList.toggle("known", known.has(d.dataset.n)));
+  document.querySelectorAll(".know input").forEach(i => i.checked = known.has(i.dataset.n));
+  document.querySelectorAll(".qs").forEach(box => {
+    const ns = box._ns || []; const c = box.querySelector(".cnt");
+    if (c) c.textContent = ns.filter(n => known.has(n)).length + " / " + ns.length + " gewusst";
+  });
+}
+function setKnown(n, v){ v ? known.add(n) : known.delete(n); save(); updateProgress(); }
+
+// Render chapter question blocks
+document.querySelectorAll(".qs").forEach(box => {
+  const [a,b] = box.dataset.q.split("-").map(s => +s.split(".")[1]);
+  const items = Q.filter(q => { const x = +q[0].split(".")[1]; return x>=a && x<=b; });
+  box._ns = items.map(q => q[0]);
+  box.innerHTML = '<div class="qs-head"><h3>Das weiss ich jetzt!</h3><span class="cnt"></span></div>' +
+    items.map(([n,q,ans]) => `<details class="q" data-n="${n}"><summary><span class="qn">${n}</span><span>${q}</span><span class="chev">›</span></summary><div class="ans"><div>${ans}</div><label class="know"><input type="checkbox" id="k-${n.replace('.','-')}" data-n="${n}"> Kann ich</label></div></details>`).join("");
+});
+document.addEventListener("change", e => { if (e.target.matches(".know input")) setKnown(e.target.dataset.n, e.target.checked); });
+
+// Trainer
+let filter = "open", pool = [], cur = null;
+function buildPool(){
+  pool = Q.filter(q => filter==="all" ? true : filter==="open" ? !known.has(q[0]) : chapterOf(q[0])===filter);
+}
+function nextQ(){
+  buildPool();
+  const tq = document.getElementById("t-q"), ta = document.getElementById("t-a"), act = document.getElementById("t-actions");
+  ta.hidden = true;
+  if (!pool.length){
+    cur = null;
+    document.getElementById("t-num").textContent = "Fertig";
+    document.getElementById("t-left").textContent = "";
+    tq.textContent = filter==="open" ? "Du hast alle 45 Fragen als gewusst markiert. Stark!" : "Keine Fragen in diesem Filter.";
+    act.innerHTML = '<button class="btn" data-a="all">Alle nochmals üben</button>';
+    return;
+  }
+  const others = pool.filter(q => !cur || q[0]!==cur[0]);
+  cur = (others.length?others:pool)[Math.floor(Math.random()*(others.length?others:pool).length)];
+  document.getElementById("t-num").textContent = "Frage " + cur[0] + " · Kapitel " + chapterOf(cur[0]);
+  document.getElementById("t-left").textContent = pool.length + " im Stapel";
+  tq.textContent = cur[1];
+  ta.innerHTML = cur[2];
+  act.innerHTML = '<button class="btn primary" data-a="show">Antwort zeigen</button><button class="btn ghost" data-a="skip">Überspringen</button>';
+}
+document.getElementById("t-actions").addEventListener("click", e => {
+  const a = e.target.closest("button")?.dataset.a; if (!a) return;
+  const act = document.getElementById("t-actions");
+  if (a==="show"){ document.getElementById("t-a").hidden = false;
+    act.innerHTML = '<button class="btn primary" data-a="yes">Gewusst ✓</button><button class="btn" data-a="no">Nochmal üben</button>'; }
+  else if (a==="yes"){ setKnown(cur[0], true); nextQ(); }
+  else if (a==="no"){ setKnown(cur[0], false); nextQ(); }
+  else if (a==="skip"){ nextQ(); }
+  else if (a==="all"){ setFilter("all"); }
+});
+function setFilter(f){
+  filter = f;
+  document.querySelectorAll(".filters .btn").forEach(b => b.setAttribute("aria-pressed", b.dataset.f===f));
+  cur = null; nextQ();
+}
+document.querySelector(".filters").addEventListener("click", e => { const b = e.target.closest("button"); if (b) setFilter(b.dataset.f); });
+document.getElementById("reset").addEventListener("click", function(){
+  if (this.dataset.armed){ known.clear(); save(); updateProgress(); setFilter("open"); this.textContent="Fortschritt zurücksetzen"; delete this.dataset.armed; }
+  else { this.dataset.armed = "1"; this.textContent = "Wirklich zurücksetzen? Nochmals klicken"; setTimeout(()=>{ if(this.dataset.armed){delete this.dataset.armed; this.textContent="Fortschritt zurücksetzen";} }, 4000); }
+});
+
+// Market simulator
+const svg = document.getElementById("sim-svg");
+const X = m => 50 + m*27, Y = p => 215 - p*19;
+const dem = (m,d) => 9 - 0.8*m + d, sup = (m,s) => 1 + 0.8*m - s;
+function eq(d,s){ const m = (8+d+s)/1.6; return [m, sup(m,s)]; }
+function line(f, sh, cls){
+  let pts=[]; for(let m=0.3;m<=9.7;m+=0.2){ const p=f(m,sh); if(p>0.2&&p<9.8) pts.push(X(m).toFixed(1)+","+Y(p).toFixed(1)); }
+  return `<polyline points="${pts.join(" ")}" fill="none" ${cls}/>`;
+}
+const CAP = {
+ "0,0":["Ausgangslage: Angebot (A) und Nachfrage (N) schneiden sich im Gleichgewicht.","",""],
+ "1.6,0":["Ein Trendprodukt kommt auf den Markt: Die Nachfragekurve verschiebt sich nach rechts.","up","up"],
+ "-1.6,0":["Wirtschaftskrise, weniger Einkommen: Die Nachfragekurve verschiebt sich nach links.","down","down"],
+ "0,1.6":["Aussergewöhnlich gute Tomatenernte: Die Angebotskurve verschiebt sich nach rechts.","down","up"],
+ "0,-1.6":["Erdölländer verringern die Fördermenge: Die Angebotskurve verschiebt sich nach links.","up","down"]
+};
+function drawSim(key){
+  const [d,s] = key.split(",").map(Number);
+  const [m0,p0] = eq(0,0), [m,p] = eq(d,s);
+  const changed = d!==0 || s!==0;
+  let h = `<defs><marker id="ax" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--ink)"/></marker></defs>`;
+  h += `<line x1="${X(0)}" y1="${Y(0)}" x2="${X(10.4)}" y2="${Y(0)}" stroke="var(--ink)" stroke-width="1.5" marker-end="url(#ax)"/>`;
+  h += `<line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(10.4)}" stroke="var(--ink)" stroke-width="1.5" marker-end="url(#ax)"/>`;
+  h += `<text x="${X(10.3)}" y="${Y(0)+18}" text-anchor="end" font-size="12">Menge</text><text x="${X(0)+6}" y="${Y(10.2)}" font-size="12">Preis</text>`;
+  if (changed){
+    h += line(dem,0,'stroke="var(--accent)" stroke-width="2" stroke-dasharray="5 4" opacity=".45"');
+    h += line(sup,0,'stroke="var(--signal)" stroke-width="2" stroke-dasharray="5 4" opacity=".45"');
+    h += `<line x1="${X(0)}" y1="${Y(p0)}" x2="${X(m0)}" y2="${Y(p0)}" stroke="var(--muted)" stroke-dasharray="2 3"/><line x1="${X(m0)}" y1="${Y(0)}" x2="${X(m0)}" y2="${Y(p0)}" stroke="var(--muted)" stroke-dasharray="2 3"/>`;
+    h += `<text x="${X(0)-6}" y="${Y(p0)+4}" text-anchor="end" font-size="11" style="fill:var(--muted)">P₁</text><text x="${X(m0)}" y="${Y(0)+16}" text-anchor="middle" font-size="11" style="fill:var(--muted)">M₁</text>`;
+  }
+  h += line(dem,d,'stroke="var(--accent)" stroke-width="3"');
+  h += line(sup,s,'stroke="var(--signal)" stroke-width="3"');
+  h += `<line x1="${X(0)}" y1="${Y(p)}" x2="${X(m)}" y2="${Y(p)}" stroke="var(--ink)" stroke-dasharray="3 3"/><line x1="${X(m)}" y1="${Y(0)}" x2="${X(m)}" y2="${Y(p)}" stroke="var(--ink)" stroke-dasharray="3 3"/>`;
+  h += `<circle cx="${X(m)}" cy="${Y(p)}" r="5" fill="var(--ink)"/>`;
+  const l = changed?"₂":"";
+  h += `<text x="${X(0)-6}" y="${Y(p)+4}" text-anchor="end" font-size="11" font-weight="700">P${l}</text><text x="${X(m)}" y="${Y(0)+16}" text-anchor="middle" font-size="11" font-weight="700">M${l}</text>`;
+  h += `<text x="${X(1.2)}" y="${Y(dem(1.2,d))-8}" font-size="12" font-weight="700" style="fill:var(--accent)">N</text>`;
+  h += `<text x="${X(8.6)}" y="${Y(Math.min(sup(8.6,s),9.6))-8}" font-size="12" font-weight="700" style="fill:var(--signal)">A</text>`;
+  svg.innerHTML = h;
+  const c = CAP[key];
+  document.getElementById("sim-cap").textContent = c[0];
+  const arrow = v => v==="up"?'<span class="up">steigt ↑</span>':'<span class="down">sinkt ↓</span>';
+  document.getElementById("sim-out").innerHTML = changed ? `<span>Preis ${arrow(c[1])}</span><span>Menge ${arrow(c[2])}</span>` : "<span>Gleichgewichtspreis und -menge</span>";
+}
+document.querySelector(".sim-btns").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  document.querySelectorAll(".sim-btns .btn").forEach(x => x.setAttribute("aria-pressed", x===b));
+  drawSim(b.dataset.s);
+});
+drawSim("0,0");
+
+// TOC active state
+const links = [...document.querySelectorAll(".toc a")];
+const targets = [...new Set(links.map(a => a.getAttribute("href")))].map(h => document.querySelector(h)).filter(Boolean);
+const io = new IntersectionObserver(es => {
+  es.forEach(en => { if (en.isIntersecting){ const id = "#"+en.target.id;
+    links.forEach(a => a.classList.toggle("active", a.getAttribute("href")===id)); } });
+}, { rootMargin: "0px 0px -70% 0px" });
+targets.forEach(t => io.observe(t));
+
+updateProgress();
+setFilter("open");
+</script>
+
+</body></html>
